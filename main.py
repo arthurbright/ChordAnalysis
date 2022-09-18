@@ -2,7 +2,8 @@ from pydub import AudioSegment
 import matplotlib.pyplot as plt
 import numpy as np
 import util
-sound1 = AudioSegment.from_file("pianoSamples/g5.wav", format="wav")
+import math
+sound1 = AudioSegment.from_file("pianomonoindexed/40.mp3", format="mp3")
 sound2 = AudioSegment.from_file("pianoSamples/g6.wav", format="wav")
 
 #re-index music files + trim them and convert to mono
@@ -20,7 +21,8 @@ sound2 = AudioSegment.from_file("pianoSamples/g6.wav", format="wav")
 
 
 # simple export
-#file_handle = overlay.export("outputcut.mp3", format="mp3")
+sound1 += 5
+file_handle = sound1.export("tl.mp3", format="mp3")
 
 
 #plan: 
@@ -35,6 +37,14 @@ sound2 = AudioSegment.from_file("pianoSamples/g6.wav", format="wav")
 #https://stackoverflow.com/questions/48097164/limiting-scipy-signal-spectrogram-to-calculate-only-specific-frequencies
 #https://en.wikipedia.org/wiki/Piano_key_frequencies
 #https://wiki.python.org/moin/UsingPickle
-spec, freqs, times, dot = plt.specgram(sound1.set_channels(1).get_array_of_samples(), Fs=sound1.frame_rate, NFFT=8192)
-print(len(spec[0]))
+spec, freqs, times, dot = plt.specgram(sound1.set_channels(1).get_array_of_samples(), Fs=sound1.frame_rate, NFFT=8192, window=plt.mlab.window_none)
+maxx = 0
+ind = -1
+count = 0
+for arr in spec:
+    count += 1
+    if(arr[0] > maxx):
+        maxx = arr[0]
+        ind = count
+print(maxx)
 plt.show()
