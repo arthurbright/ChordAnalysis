@@ -1,0 +1,4 @@
+pydub
+tensorflow
+matplotlib
+scipy
